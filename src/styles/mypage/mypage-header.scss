@@ -1,0 +1,61 @@
+strong {
+  font-size: 21px;
+}
+
+span {
+  font-size: 18px;
+  font-weight: 700;
+  margin-left: 15px;
+}
+
+.container {
+  margin: 0 auto;
+}
+
+.coupon-summary {
+  width: 33%;
+  border: 1px solid #e2e2e2;
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+  padding: 20px;
+}
+
+.mileage-summary {
+  width: 33%;
+  border: 1px solid #e2e2e2;
+  padding: 20px;
+}
+
+.heart-summary {
+  width: 33%;
+  border: 1px solid #e2e2e2;
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+  padding: 20px;
+}
+
+.shipping-status-box {
+  border: 2px solid #e2e2e2;
+  border-radius: 15px;
+  width: 100%;
+  height: 100px;
+  padding: 30px;
+}
+
+.cancel-menu {
+  width: 50%;
+  height: 70px;
+  background-color: #f2f2f2;
+  border: 1px solid #e2e2e2;
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+}
+
+.complete-menu {
+  width: 50%;
+  height: 70px;
+  background-color: #f2f2f2;
+  border: 1px solid #e2e2e2;
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+}

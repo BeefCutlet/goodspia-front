@@ -1,0 +1,52 @@
+/**
+ * src/styles/settings.scss
+ *
+ * Configures SASS variables and Vuetify overwrites
+ */
+
+// https://vuetifyjs.com/features/sass-variables/`
+// @use 'vuetify/settings' with (
+//   $color-pack: false
+// );
+
+@font-face {
+  font-family: 'trw-reg';
+  src: url(/font/TmoneyRoundWindRegular.ttf);
+}
+
+@font-face {
+  font-family: 'trw-exb';
+  src: url(/font/TmoneyRoundWindExtraBold.ttf);
+}
+
+ul {
+  li {
+    list-style-type: none;
+  }
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+strong {
+  font-family: 'trw-exb';
+}
+
+div,
+span {
+  font-family: 'trw-reg';
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

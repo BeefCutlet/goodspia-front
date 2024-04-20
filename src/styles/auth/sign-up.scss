@@ -1,0 +1,82 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 80px;
+}
+
+.toggle-box {
+  font-size: 18px;
+  font-weight: bold;
+
+  .login-toggle {
+    width: 150px;
+    height: 50px;
+    background-color: white;
+    border: 1px solid white;
+    color: black;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+  }
+
+  .registration-toggle {
+    width: 150px;
+    height: 50px;
+    background-color: black;
+    border: 1px solid black;
+    color: white;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+  }
+}
+
+.registration-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+
+  .registration-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    .registration-input {
+      width: 320px;
+      height: 40px;
+      border-radius: 5px;
+      border: 1px solid #eaeaea;
+      background-color: #f2f2f2;
+      text-indent: 12px;
+
+      &::placeholder {
+        font-size: 14px;
+        color: #a2a2a2;
+        text-indent: 12px;
+      }
+    }
+  }
+}
+
+.sign-up-btn {
+  width: 320px;
+  height: 40px;
+  border-radius: 50px;
+  border: 1px solid black;
+  color: white;
+  background-color: black;
+  padding: 20px;
+
+  font-weight: bold;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.error {
+  color: tomato;
+  font-size: medium;
+}
