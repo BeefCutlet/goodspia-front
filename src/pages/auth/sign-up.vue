@@ -240,7 +240,7 @@ const checkAddress2 = () => {
 //========= 유효성 검사 끝 =========//
 
 const checkValid = () => {
-  const isValid = false
+  let isValid = false
   if (
     checkEmail &&
     checkPassword &&
