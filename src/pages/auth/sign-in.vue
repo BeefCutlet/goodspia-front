@@ -28,7 +28,11 @@
         <span style="cursor: pointer">비밀번호 찾기</span>
       </div>
       <div class="login-items">
-        <button class="login-button" @click="signIn(email, password)">
+        <button
+          id="loginBtn"
+          class="login-button"
+          @click="signIn(email, password)"
+        >
           로그인
         </button>
         <button class="login-button kakao">카카오 로그인</button>
@@ -41,6 +45,7 @@
 import { login } from '@/api/auth'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { onKeyStroke } from '@vueuse/core'
 
 const router = useRouter()
 
@@ -53,6 +58,10 @@ const signIn = (id, pw) => {
     router.push('/')
   })
 }
+
+onKeyStroke('Enter', (e) => {
+  document.getElementById('loginBtn').click()
+})
 </script>
 
 <style lang="scss" scoped>

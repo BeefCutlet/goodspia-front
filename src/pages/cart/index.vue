@@ -136,7 +136,7 @@ import OrderHeader from '@/components/order/OrderHeader.vue'
 import { validateAuth } from '@/util/authUtil'
 import { watch } from 'vue'
 import { onBeforeMount } from 'vue'
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -158,7 +158,7 @@ const cartList = ref([])
 const getCarts = async () => {
   const isSuccess = await validateAuth()
   if (!isSuccess) {
-    router.push('/auth/sign-in')
+    router.replace('/auth/sign-in')
     return null
   }
   return await getCartList()
