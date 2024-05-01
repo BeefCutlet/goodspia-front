@@ -12,7 +12,7 @@
     <div class="d-flex flex-column justify-center align-center ma-1">
       <!-- 찜하기 버튼 -->
       <v-btn icon="mdi-cards-heart-outline" variant="flat" @click.stop />
-      <span class="text-caption">1</span>
+      <span class="text-caption">{{ item.wishCount }}</span>
     </div>
   </v-card>
 </template>

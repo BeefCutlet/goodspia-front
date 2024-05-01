@@ -2,7 +2,7 @@
   <div class="mb-15">
     <v-container>
       <v-row>
-        <v-col>
+        <v-col class="d-flex">
           <v-img :src="goodsItem.thumbnail" />
         </v-col>
         <v-col>
@@ -18,7 +18,13 @@
     <!-- 세부 내용 메뉴 -->
     <GoodsDetailMenu />
     <div class="my-16 px-10 text-center">
-      <p>굿즈 세부 사항</p>
+      <GoodsDetailContent
+        :content-image-url="goodsItem.content"
+        :goods-name="goodsItem.name"
+        :material="goodsItem.material"
+        :size="goodsItem.size"
+        :designs="goodsDesignNames"
+      />
     </div>
 
     <!-- 리뷰 -->
@@ -40,15 +46,16 @@ import GoodsDetailForm from '@/components/goods/detail/GoodsDetailForm.vue'
 import GoodsDetailMenu from '@/components/goods/detail/GoodsDetailMenu.vue'
 import GoodsDetailReview from '@/components/goods/detail/GoodsDetailReview.vue'
 import GoodsDetailQnA from '@/components/goods/detail/GoodsDetailQnA.vue'
+import GoodsDetailContent from '@/components/goods/detail/GoodsDetailContent.vue'
 import { useRoute } from 'vue-router'
-import { onMounted } from 'vue'
 import { getGoods } from '@/api/goods'
-import { ref } from 'vue'
+import { ref, onBeforeMount } from 'vue'
 
 const route = useRoute()
 
 const goodsItem = ref({})
 const goodsDesigns = ref([])
+const goodsDesignNames = ref([])
 const getGoodsItem = async () => {
   const id = route.params.id
   goodsItem.value = await getGoods(id)
@@ -63,10 +70,11 @@ const getGoodsItem = async () => {
       }),
     )
     goodsDesigns.value.push(designInfo)
+    goodsDesignNames.value.push(design.designName)
   })
 }
 
-onMounted(() => {
+onBeforeMount(() => {
   getGoodsItem()
 })
 </script>

@@ -37,7 +37,7 @@ const memberInfo = ref()
 const getMemberInfo = async () => {
   const isSuccess = await validateAuth()
   if (!isSuccess) {
-    router.push('/auth/sign-in')
+    router.replace('/auth/sign-in')
     return null
   }
   memberInfo.value = await getMember()

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container ma-10">
     <v-list class="text-center">
       <h2 class="mb-2">아티스트 메뉴</h2>
       <v-list-item prepend-icon="mdi-phone">
@@ -26,7 +26,7 @@
 
       <v-list-item prepend-icon="mdi-phone">
         <v-list-item-title
-          @click="$router.push('/artist/goods/my-goods')"
+          @click="$router.push('/artist/goods/my-list')"
           class="cursor-pointer"
         >
           내 굿즈
@@ -52,6 +52,10 @@
 <style lang="scss" scoped>
 .container {
   width: 350px;
+  height: 350px;
+  position: sticky;
+  top: 150px;
+
   border: 1px solid black;
   border-radius: 10px;
   padding: 20px;

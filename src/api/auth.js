@@ -11,8 +11,6 @@ export const login = async (email, password) => {
       password,
     })
     .then((response) => {
-      console.log('data: ', response.data)
-      console.log('accessToken: ', response.data.accessToken)
       authStore.setToken(response.data.accessToken)
     })
     .catch((err) => {
@@ -77,7 +75,6 @@ export const retakeToken = async () => {
   return await api
     .post('/auth/refresh-token', {}, { retry: 0 })
     .then((response) => {
-      console.log('액세스 토큰 재발급 성공')
       authStore.setToken(response.data.accessToken)
       return true
     })

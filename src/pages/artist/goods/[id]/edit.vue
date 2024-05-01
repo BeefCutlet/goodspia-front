@@ -1,6 +1,7 @@
 <template>
   <div class="pa-10 d-flex flex-column ga-5 container">
-    <h1>굿즈 등록</h1>
+    <h1>굿즈 수정</h1>
+    <h2>{{ goodsName }}</h2>
     <!-- 썸네일 이미지 표시 -->
     <div
       class="d-flex flex-column ga-5 justify-center align-center my-5 thumbnail-box"
@@ -66,16 +67,16 @@
           color="secondary"
           class="mx-3"
         >
-          수량제한 없음
+          수량제한 비활성화
         </v-btn>
         <v-btn
           v-else-if="!isLimited"
           @click="toggleLimited"
           variant="flat"
-          color="error"
+          color="primary"
           class="mx-3"
         >
-          수량제한 있음
+          수량제한 활성화
         </v-btn>
       </div>
     </div>
@@ -123,8 +124,8 @@
             type="text"
             placeholder="디자인을 추가해주세요."
             class="goods-design-input"
-            :value="design"
-            @input="(event) => (designs[index] = event.target.value)"
+            :value="design.designName"
+            @input="(event) => (designs[index].designName = event.target.value)"
           />
           <v-btn
             icon="mdi-plus"
@@ -154,7 +155,7 @@
       v-model="isPreviewOpen"
       @update:is-preview-open="closePreview"
       :content-image-url="contentImageUrl"
-      :designs="designs"
+      :designs="designNames"
       :goods-name="goodsName"
       :material="material"
       :size="size"
@@ -162,31 +163,36 @@
 
     <!-- 등록 버튼 -->
     <div class="d-flex justify-end align-center ga-5 my-5">
-      <v-btn variant="tonal" @click="">초기화</v-btn>
-      <v-btn variant="flat" color="primary" @click="addGoods">등록</v-btn>
+      <v-btn variant="tonal" @click="reset">초기화</v-btn>
+      <v-btn variant="flat" color="primary" @click="modifyGoodsInfo">
+        수정
+      </v-btn>
     </div>
   </div>
 </template>
 
 <script setup>
 import { getArtist } from '@/api/artist'
-import { registerGoods } from '@/api/goods'
+import { getRegisteredGoods, modifyGoods } from '@/api/goods'
 import { validateAuth } from '@/util/authUtil'
-import { ref, onBeforeMount } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, watch, onBeforeMount } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 
 import GoodsContentDialog from '@/components/goods/mypage/GoodsContentDialog.vue'
-import { watch } from 'vue'
 
+const route = useRoute()
 const router = useRouter()
 
 //초기값
+const initialGoods = ref({})
+
 const goodsName = ref('')
 const price = ref(1000)
 const stock = ref(0)
 const material = ref('')
 const size = ref('')
-const designs = ref([''])
+const isLimited = ref(true)
+const designs = ref([])
 
 //굿즈 내용 변수
 const contentImageUrl = ref('')
@@ -205,12 +211,27 @@ watch(thumbnail, (newThumbnail) => {
 })
 
 //수량 제한 존재 여부
-const isLimited = ref(true)
 const toggleLimited = () => {
   isLimited.value = !isLimited.value
   if (!isLimited.value) {
     stock.value = 0
   }
+}
+
+//변수 초기화
+const init = () => {
+  goodsName.value = initialGoods.value.goodsName
+  price.value = initialGoods.value.price
+  stock.value = initialGoods.value.stock
+  material.value = initialGoods.value.material
+  size.value = initialGoods.value.size
+  isLimited.value = initialGoods.value.isLimited === 0 ? false : true
+  designs.value =
+    initialGoods.value.designs.length === 0
+      ? [{ designId: null, designName: '' }]
+      : initialGoods.value.designs
+  contentImageUrl.value = initialGoods.value.content
+  thumbnailUrl.value = initialGoods.value.thumbnail
 }
 
 onBeforeMount(async () => {
@@ -227,19 +248,25 @@ onBeforeMount(async () => {
     router.replace('/apply')
     return
   }
+
+  initialGoods.value = await getRegisteredGoods(route.params.id)
+  init()
 })
 
 //디자인 input 추가
 const addDesignInput = () => {
   let isFull = true
   designs.value.forEach((design) => {
-    if (design === '') {
+    if (design.designName === '') {
       isFull = false
       return
     }
   })
   if (isFull) {
-    designs.value.push('')
+    designs.value.push({
+      designId: null,
+      designName: '',
+    })
   }
 }
 
@@ -251,20 +278,21 @@ const removeDesignInput = (index) => {
   designs.value.splice(index, 1)
 }
 
-//굿즈 등록 - 등록 버튼 클릭 시 이벤트
-const addGoods = async () => {
+//굿즈 수정 - 수정 버튼 클릭 시 이벤트
+const modifyGoodsInfo = async () => {
   if (!validateGoods()) {
     return
   }
 
   const goodsFormData = new FormData()
   const goods = {
+    goodsId: initialGoods.value.goodsId,
     name: goodsName.value,
     price: price.value,
     stock: stock.value,
+    isLimited: isLimited.value,
     material: material.value,
     size: size.value,
-    isLimited: isLimited.value,
     designs: designs.value,
   }
 
@@ -273,10 +301,17 @@ const addGoods = async () => {
   })
 
   goodsFormData.append('goods', blob)
-  goodsFormData.append('thumbnail', thumbnail.value)
-  goodsFormData.append('contentImage', contentImage.value)
+  //새로운 썸네일 이미지가 있을 때에만 추가
+  if (!!thumbnail.value) {
+    goodsFormData.append('thumbnail', thumbnail.value)
+  }
 
-  const isSuccess = await registerGoods(goodsFormData)
+  //새로운 굿즈 상세 이미지가 있을 때에만 추가
+  if (!!contentImage.value) {
+    goodsFormData.append('contentImage', contentImage.value)
+  }
+
+  const isSuccess = await modifyGoods(goodsFormData)
 }
 
 //굿즈 등록 시 검증
@@ -285,22 +320,26 @@ const validateGoods = () => {
   if (
     !goodsName.value ||
     !price.value ||
-    !stock.value ||
+    stock.value < 0 ||
     !material.value ||
     !size.value ||
-    !thumbnail.value ||
-    !designs.value.length
+    designs.value.length < 1
   ) {
     isValid = false
   }
 
   designs.value.forEach((design) => {
-    if (!design) {
+    if (!design.designName) {
       isValid = false
     }
   })
 
   return isValid
+}
+
+//내용 초기화 - 초기화 버튼 클릭 시 이벤트
+const reset = () => {
+  init()
 }
 
 //굿즈 상세 이미지 삭제 시 이벤트
@@ -310,7 +349,12 @@ const removeContentImage = () => {
 
 //미리보기 - 미리보기 버튼 클릭 시 이벤트
 const isPreviewOpen = ref(false)
+const designNames = ref([])
 const showPreview = () => {
+  designNames.value = []
+  designs.value.forEach((design) => {
+    designNames.value.push(design.designName)
+  })
   isPreviewOpen.value = true
 }
 

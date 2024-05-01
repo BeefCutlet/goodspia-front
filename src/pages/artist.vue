@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex justify-center">
+  <div class="d-flex ga-5">
     <ArtistMenu />
     <router-view />
   </div>

@@ -1,7 +1,6 @@
 import { useAuthStore } from '@/stores/auth'
 import axios from 'axios'
 import { retakeToken } from './auth'
-import { useRouter } from 'vue-router'
 
 const authStore = useAuthStore()
 
@@ -38,7 +37,7 @@ api.interceptors.response.use(
     }
 
     // 네트워크 시간 초과, 네트워크 에러 시 reject
-    if (!(message.includes('timeout') || message.includes('Network Error'))) {
+    if (message.includes('timeout') || message.includes('Network Error')) {
       return Promise.reject(error)
     }
 
@@ -52,10 +51,8 @@ api.interceptors.response.use(
       if (isSuccess) {
         axios.request(error.request.config)
       } else {
-        if (confirm('로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?')) {
-          const router = useRouter()
-          router.push('/auth/sign-in')
-        }
+        location.replace('/auth/sign-in')
+        return
       }
     }
     return Promise.reject(error)
