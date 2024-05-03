@@ -1,4 +1,6 @@
+import { useToastStore } from '@/stores/toast'
 import api from '.'
+const toastStore = useToastStore()
 
 export const getMember = async () => {
   return await api
@@ -7,7 +9,7 @@ export const getMember = async () => {
       return response.data
     })
     .catch((error) => {
-      console.log('회원 정보 조회 실패: ', error.response.data)
+      useToastStore.useToast('회원 정보 조회 실패')
       return null
     })
 }
@@ -26,10 +28,11 @@ export const updateMember = async ({
       birthday,
     })
     .then((response) => {
+      toastStore.useSuccessToast('회원 정보 수정 성공')
       return true
     })
     .catch((error) => {
-      console.log('회원 정보 수정 실패: ', error.response.data)
+      toastStore.useToast('회원 정보 수정 실패')
       return false
     })
 }

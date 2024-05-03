@@ -1,7 +1,9 @@
-import { useAuthStore } from '@/stores/auth'
+import { useToastStore } from '@/stores/toast'
 import api from '.'
+import { useAuthStore } from '@/stores/auth'
 
 const authStore = useAuthStore()
+const toastStore = useToastStore()
 
 //로그인
 export const login = async (email, password) => {
@@ -12,11 +14,12 @@ export const login = async (email, password) => {
     })
     .then((response) => {
       authStore.setToken(response.data.accessToken)
+      toastStore.useSuccessToast('로그인 성공')
+      return true
     })
-    .catch((err) => {
-      console.log('로그인 실패, err: ', err.response.data)
-      return '로그인 실패'
-      //TODO: 알림 메시지 띄우기
+    .catch((error) => {
+      toastStore.useSuccessToast('로그인 실패')
+      return false
     })
 }
 
@@ -48,12 +51,10 @@ export const signUp = async ({
     })
     .then((response) => {
       authStore.setToken(response.data.accessToken)
-      console.log('Login Success!')
       return true
     })
     .catch((err) => {
-      console.log('회원가입 실패 err: ', err.response.data)
-      return '회원가입 실패'
+      return false
     })
 }
 
@@ -63,10 +64,12 @@ export const logout = async () => {
     .post('/auth/logout')
     .then((response) => {
       authStore.deleteToken()
+      toastStore.useSuccessToast('로그아웃 성공')
+      return true
     })
     .catch((err) => {
-      console.log('로그아웃 실패, err: ', err.response.data)
-      return '로그아웃 실패'
+      toastStore.useToast('로그아웃 실패')
+      return false
     })
 }
 

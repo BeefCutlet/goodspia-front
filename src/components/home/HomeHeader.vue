@@ -57,7 +57,7 @@
           <v-divider class="my-2"></v-divider>
           <v-list-item-title class="cursor-pointer">고객센터</v-list-item-title>
           <v-divider class="my-2"></v-divider>
-          <v-list-item-title @click="executeLogout()" class="cursor-pointer">
+          <v-list-item-title @click="executeLogout" class="cursor-pointer">
             로그아웃
           </v-list-item-title>
         </v-list-item>
@@ -72,6 +72,7 @@
 import { logout } from '@/api/auth'
 import { useAuthStore } from '@/stores/auth'
 import { validateAuth } from '@/util/authUtil'
+
 import { useRouter } from 'vue-router'
 
 const authStore = useAuthStore()

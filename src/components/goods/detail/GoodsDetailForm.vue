@@ -62,12 +62,12 @@
       </p>
     </div>
     <div class="d-flex flex-column justify-space-around mb-5 ga-3">
-      <v-btn variant="outlined" color="primary" block @click="addCarts"
-        >장바구니</v-btn
-      >
-      <v-btn variant="flat" color="primary" block @click="addOrders"
-        >구매하기</v-btn
-      >
+      <v-btn variant="outlined" color="primary" block @click="addCarts">
+        장바구니
+      </v-btn>
+      <v-btn variant="flat" color="primary" block @click="addOrders">
+        구매하기
+      </v-btn>
     </div>
     <v-divider />
     <div class="d-flex mb-3 ga-2">
@@ -90,9 +90,11 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { addCartList } from '@/api/cart'
-import SelectedGoodsDesign from './SelectedGoodsDesign.vue'
 import { useRouter } from 'vue-router'
 import { validateAuth } from '@/util/authUtil'
+
+import SelectedGoodsDesign from './SelectedGoodsDesign.vue'
+import { useToastStore } from '@/stores/toast'
 
 const props = defineProps({
   goodsItem: {
@@ -104,6 +106,7 @@ const props = defineProps({
 })
 
 const router = useRouter()
+const toastStore = useToastStore()
 
 //총 수량
 const totalQuantity = ref(0)
@@ -208,6 +211,7 @@ const addCarts = async () => {
   //저장할 장바구니 목록
   const cartList = createCartList()
   console.log('cartList:', cartList)
+
   //장바구니에 선택한 굿즈를 저장
   isSuccess = await addCartList(cartList)
   if (isSuccess) {
@@ -217,11 +221,6 @@ const addCarts = async () => {
       )
     ) {
       router.push('/cart')
-    }
-  } else {
-    if (confirm('로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?')) {
-      router.push('/auth/sign-in')
-      return
     }
   }
 }
@@ -235,9 +234,6 @@ const createCartList = () => {
       goodsId: props.goodsItem.goodsId,
       designId: design.designId,
     })
-    console.log('quantity: ', design.quantity)
-    console.log('goodsId: ', props.goodsItem.goodsId)
-    console.log('designId: ', design.designId)
   })
   return {
     cartList: tempCartList,
