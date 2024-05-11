@@ -9,6 +9,7 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
   withCredentials: true,
   retry: 1,
+  needAuth: true,
   timeout: 3000,
 })
 
@@ -49,10 +50,16 @@ api.interceptors.response.use(
       //=> 실패 시, 로그인 화면으로 이동
       const isSuccess = await retakeToken()
       if (isSuccess) {
-        axios.request(error.request.config)
-      } else {
-        location.replace('/auth/sign-in')
-        return
+        console.log('error Request: ', error.config)
+        axios.request({
+          ...error.request,
+          headers: {
+            Authorization: authStore.bearerToken,
+          },
+        })
+        Promise.resolve()
+      } else if (!!config.needAuth) {
+        location.href('/auth/sign-in')
       }
     }
     return Promise.reject(error)

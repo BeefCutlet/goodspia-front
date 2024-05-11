@@ -11,8 +11,13 @@
           {{ goodsItem.price }}원
         </h2>
       </div>
-      <div class="d-flex justify-center align-center">
-        <v-btn variant="flat" icon="mdi-cards-heart-outline" />
+      <div class="d-flex flex-column justify-center align-center">
+        <v-btn
+          variant="flat"
+          :icon="!!wishStatus ? 'mdi-cards-heart' : 'mdi-cards-heart-outline'"
+          @click="$emit('toggleWish')"
+        />
+        <span class="text-caption">{{ goodsItem.wishCount }}</span>
       </div>
     </div>
     <v-divider />
@@ -94,7 +99,6 @@ import { useRouter } from 'vue-router'
 import { validateAuth } from '@/util/authUtil'
 
 import SelectedGoodsDesign from './SelectedGoodsDesign.vue'
-import { useToastStore } from '@/stores/toast'
 
 const props = defineProps({
   goodsItem: {
@@ -103,10 +107,15 @@ const props = defineProps({
   goodsDesigns: {
     type: Array,
   },
+  wishStatus: {
+    type: Boolean,
+    default: false,
+  },
 })
 
+defineEmits(['toggleWish'])
+
 const router = useRouter()
-const toastStore = useToastStore()
 
 //총 수량
 const totalQuantity = ref(0)

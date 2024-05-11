@@ -10,6 +10,8 @@
           <GoodsDetailForm
             :goods-item="goodsItem"
             :goods-designs="goodsDesigns"
+            :wish-status="wishStatus"
+            @toggle-wish="toggleWish"
           />
         </v-col>
       </v-row>
@@ -49,16 +51,30 @@ import GoodsDetailQnA from '@/components/goods/detail/GoodsDetailQnA.vue'
 import GoodsDetailContent from '@/components/goods/detail/GoodsDetailContent.vue'
 import { useRoute } from 'vue-router'
 import { getGoods } from '@/api/goods'
-import { ref, onBeforeMount } from 'vue'
+import { ref, onBeforeMount, watch } from 'vue'
+import { addWish, deleteWish, getWishStatus } from '@/api/wish'
 
 const route = useRoute()
+const goodsId = route.params.id
 
 const goodsItem = ref({})
 const goodsDesigns = ref([])
 const goodsDesignNames = ref([])
+
+const wish = ref(null)
+const wishStatus = ref(false)
+
+//액세스 토큰에 변화가 생길 경우(로그인 상태 변화), 찜하기 상태를 재확인
+watch(wish, async (current) => {
+  if (!!current) {
+    const wish = await getWishStatus(goodsId)
+    wishStatus.value = wish.wishStatus
+  }
+})
+
 const getGoodsItem = async () => {
-  const id = route.params.id
-  goodsItem.value = await getGoods(id)
+  goodsItem.value = await getGoods(goodsId)
+
   goodsItem.value.goodsDesigns.forEach((design) => {
     const designInfo = JSON.parse(
       JSON.stringify({
@@ -72,11 +88,27 @@ const getGoodsItem = async () => {
     goodsDesigns.value.push(designInfo)
     goodsDesignNames.value.push(design.designName)
   })
+
+  wish.value = await getWishStatus(goodsId)
 }
 
 onBeforeMount(() => {
   getGoodsItem()
 })
+
+const toggleWish = async () => {
+  let isSuccess = false
+  if (!!wishStatus.value) {
+    isSuccess = await deleteWish(goodsId)
+  } else {
+    isSuccess = await addWish(goodsId)
+  }
+
+  if (isSuccess) {
+    wishStatus.value ? goodsItem.value.wishCount-- : goodsItem.value.wishCount++
+    wishStatus.value = !wishStatus.value
+  }
+}
 </script>
 
 <style lang="scss" scoped></style>

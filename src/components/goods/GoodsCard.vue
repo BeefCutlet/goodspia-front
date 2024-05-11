@@ -11,7 +11,14 @@
     </div>
     <div class="d-flex flex-column justify-center align-center ma-1">
       <!-- 찜하기 버튼 -->
-      <v-btn icon="mdi-cards-heart-outline" variant="flat" @click.stop />
+      <v-btn
+        :icon="
+          item.wishStatus === true
+            ? 'mdi-cards-heart'
+            : 'mdi-cards-heart-outline'
+        "
+        variant="flat"
+      />
       <span class="text-caption">{{ item.wishCount }}</span>
     </div>
   </v-card>
