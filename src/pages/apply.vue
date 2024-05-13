@@ -63,6 +63,8 @@ onBeforeMount(async () => {
   const artist = await getArtist()
   if (!!artist) {
     router.replace('/artist/goods/register')
+  } else {
+    router.replace('/auth/sign-in')
   }
 })
 
