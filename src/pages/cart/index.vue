@@ -53,7 +53,9 @@
                   {{ cartItem.goodsName }}
                 </h3>
                 <p>디자인:&nbsp;{{ cartItem.designName }}</p>
-                <p class="text-caption">판매가&nbsp;{{ cartItem.price }}원</p>
+                <p class="text-caption">
+                  판매가&nbsp;{{ cartItem.price.toLocaleString() }}원
+                </p>
                 <p class="text-caption">배송비&nbsp;3,000원</p>
               </div>
               <div>
@@ -74,7 +76,9 @@
                     @click="plusQuantity(cartItem.cartId)"
                   />
                 </div>
-                <h3>{{ cartItem.price * cartItem.quantity }}원</h3>
+                <h3>
+                  {{ (cartItem.price * cartItem.quantity).toLocaleString() }}원
+                </h3>
               </div>
             </div>
             <v-divider class="my-4" />
@@ -86,7 +90,7 @@
       <section class="total-info-box">
         <div class="d-flex justify-space-between">
           <h3>결제금액</h3>
-          <h3>{{ totalGoodsPrice + deliveryCharge }}원</h3>
+          <h3>{{ (totalGoodsPrice + deliveryCharge).toLocaleString() }}원</h3>
         </div>
         <v-divider class="my-3" />
         <div class="cart-result">
@@ -98,19 +102,23 @@
         <div class="cart-result">
           <p>총 주문금액</p>
           <p>
-            <strong>{{ totalGoodsPrice }}원</strong>
+            <strong>{{ totalGoodsPrice.toLocaleString() }}원</strong>
           </p>
         </div>
         <div class="cart-result">
           <p>총 배송비</p>
           <p>
-            <strong>{{ deliveryCharge }}원</strong>
+            <strong>{{ deliveryCharge.toLocaleString() }}원</strong>
           </p>
         </div>
         <div class="cart-result">
           <p>총 결제금액</p>
           <p>
-            <strong>{{ totalGoodsPrice + deliveryCharge }}원</strong>
+            <strong
+              >{{
+                (totalGoodsPrice + deliveryCharge).toLocaleString()
+              }}원</strong
+            >
           </p>
         </div>
         <v-divider class="my-3" />

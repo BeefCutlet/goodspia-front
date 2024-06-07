@@ -9,7 +9,7 @@ export const getMember = async () => {
       return response.data
     })
     .catch((error) => {
-      useToastStore.useToast('회원 정보 조회 실패')
+      toastStore.useToast('회원 정보 조회 실패')
       return null
     })
 }

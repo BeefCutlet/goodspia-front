@@ -345,6 +345,11 @@
   dependencies:
     "@octokit/openapi-types" "^22.0.1"
 
+"@portone/browser-sdk@^0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@portone/browser-sdk/-/browser-sdk-0.0.7.tgz#8add12b214023e8591a41200997443b89dce8f6d"
+  integrity sha512-R/0geK4g7ehUelYnpavhTxDJeWYzsJtOBSVT70ByM2EdDJ4i6Oz6V2gJ7A4BopD93BbXrZayrHaoVoV7Isbb/w==
+
 "@rollup/pluginutils@^5.0.4", "@rollup/pluginutils@^5.1.0":
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/@rollup/pluginutils/-/pluginutils-5.1.0.tgz#7e53eddc8c7f483a4ad0b94afb1f7f5fd3c771e0"

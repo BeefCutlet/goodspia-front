@@ -12,16 +12,23 @@
 
       <!-- 마이페이지 내용 -->
     </MypageMenuDetail>
+
+    <!-- 찜 목록 -->
+    <section class="mt-10 item-center">
+      <WishCardList :items="wishListInfo.wishList" />
+    </section>
   </div>
 </template>
 
 <script setup>
 import MypageMenuDetail from '@/components/mypage/MypageMenuDetail.vue'
+import WishCardList from '@/components/wish/WishCardList.vue'
 
 import { onMounted, ref } from 'vue'
 import { validateAuth } from '@/util/authUtil'
 import { useRouter } from 'vue-router'
 import { getMember } from '@/api/member'
+import { getWishList } from '@/api/wish'
 
 const router = useRouter()
 
@@ -48,8 +55,18 @@ const getMemberInfo = async () => {
   memberInfo.value = await getMember()
 }
 
-onMounted(() => {
-  getMemberInfo()
+/**
+ * 찜 목록 조회
+ */
+const wishListInfo = ref({})
+const getWishes = async () => {
+  const wishList = await getWishList()
+  wishListInfo.value = wishList
+}
+
+onMounted(async () => {
+  await getMemberInfo()
+  await getWishes()
 })
 </script>
 

@@ -38,12 +38,45 @@
     <v-divider class="my-4" />
     <div>
       <h2>결제방법</h2>
-      <button class="pay-method-btn">카카오페이</button>
+      <button
+        :class="
+          paymentMethod === 'CARD' ? 'pay-method-clicked-btn' : 'pay-method-btn'
+        "
+        @click="(event) => changePayMethod(event.target.value)"
+        value="CARD"
+      >
+        카드 결제
+      </button>
+      <button
+        :class="
+          paymentMethod === 'TRANSFER'
+            ? 'pay-method-clicked-btn'
+            : 'pay-method-btn'
+        "
+        @click="(event) => changePayMethod(event.target.value)"
+        value="TRANSFER"
+      >
+        실시간 계좌이체
+      </button>
+      <button
+        :class="
+          paymentMethod === 'EASY_PAY'
+            ? 'pay-method-clicked-btn'
+            : 'pay-method-btn'
+        "
+        @click="(event) => changePayMethod(event.target.value)"
+        value="EASY_PAY"
+      >
+        카카오페이
+      </button>
     </div>
   </div>
 </template>
 
 <script setup>
+import { usePaymentStore } from '@/stores/pay'
+import { ref } from 'vue'
+
 const props = defineProps({
   memberInfo: {
     type: Object,
@@ -62,6 +95,13 @@ const props = defineProps({
     },
   },
 })
+
+const paymentStore = usePaymentStore()
+const changePayMethod = (payMethod) => {
+  paymentStore.setPayMethod(payMethod)
+  paymentMethod.value = payMethod
+}
+const paymentMethod = ref('CARD')
 </script>
 
 <style lang="scss" scoped>
@@ -79,10 +119,20 @@ const props = defineProps({
   width: 900px;
 }
 
-.pay-method-btn {
+.pay-method-clicked-btn {
   width: 40%;
   color: white;
   background-color: #4665c4;
+  margin-right: 12px;
+  margin-bottom: 20px;
+}
+
+.pay-method-btn {
+  width: 40%;
+  color: black;
+  background-color: #f2f2f2;
+  margin-right: 12px;
+  margin-bottom: 20px;
 }
 
 .deliveryMessage {

@@ -19,7 +19,7 @@
         </div>
         <div class="heart-summary">
           <p class="text-caption">하트</p>
-          <p><strong>7</strong>&nbsp;개</p>
+          <p><strong>0</strong>&nbsp;개</p>
         </div>
       </div>
 

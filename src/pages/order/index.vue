@@ -38,13 +38,13 @@ const getMemberInfo = async () => {
   const isSuccess = await validateAuth()
   if (!isSuccess) {
     router.replace('/auth/sign-in')
-    return null
+    return
   }
-  memberInfo.value = await getMember()
+  return await getMember()
 }
 
-onMounted(() => {
-  getMemberInfo()
+onMounted(async () => {
+  memberInfo.value = await getMemberInfo()
 })
 </script>
 

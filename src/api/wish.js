@@ -37,3 +37,15 @@ export const deleteWish = async (goodsId) => {
       return false
     })
 }
+
+export const getWishList = async () => {
+  return await api
+    .get('/wish')
+    .then((response) => {
+      return response.data
+    })
+    .catch((error) => {
+      toastStore.useToast('찜 목록 조회 실패')
+      return null
+    })
+}
