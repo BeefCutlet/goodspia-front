@@ -37,7 +37,7 @@
                 <v-icon icon="mdi-chevron-right" />
               </div>
             </router-link>
-            <router-link to="/mypage">
+            <router-link to="/mypage/coupon">
               <div class="d-flex justify-space-between align-center">
                 <p>쿠폰</p>
                 <v-icon icon="mdi-chevron-right" />

@@ -24,37 +24,27 @@ export const login = async (email, password) => {
 }
 
 //회원가입
-export const signUp = async ({
-  email,
-  password,
-  nickname,
-  name,
-  gender,
-  phoneNumber,
-  birthday,
-  zipcode,
-  address1,
-  address2,
-}) => {
+export const signUp = async (member) => {
   return await api
     .post('/members', {
-      email,
-      password,
-      nickname,
-      name,
-      gender,
-      phoneNumber,
-      birthday,
-      zipcode,
-      address1,
-      address2,
+      email: member.email,
+      password: member.password,
+      nickname: member.nickname,
+      name: member.name,
+      gender: member.gender,
+      phoneNumber: member.phoneNumber,
+      birthday: member.birthday,
+      zipcode: member.zipcode,
+      address1: member.address1,
+      address2: member.address2,
     })
     .then((response) => {
       authStore.setToken(response.data.accessToken)
       return true
     })
     .catch((err) => {
-      return false
+      toastStore.useToast('회원가입 실패')
+      Promise.reject()
     })
 }
 

@@ -10,7 +10,7 @@
       </button>
     </div>
     <div class="login-box">
-      <div class="login-items">
+      <form class="login-items">
         <input
           type="text"
           class="login-input"
@@ -22,8 +22,9 @@
           class="login-input"
           placeholder="비밀번호를 입력해주세요"
           v-model="password"
+          autocomplete="off"
         />
-      </div>
+      </form>
       <div class="find-pw-box">
         <span style="cursor: pointer">비밀번호 찾기</span>
       </div>
@@ -53,10 +54,11 @@ const email = ref('')
 const password = ref('')
 
 //로그인 - 이메일, 패스워드 입력하여 로그인, 성공하면 홈 화면으로 이동
-const signIn = (id, pw) => {
-  login(id, pw).then(() => {
+const signIn = async (id, pw) => {
+  const isSuccess = await login(id, pw)
+  if (isSuccess) {
     router.push('/')
-  })
+  }
 }
 
 onKeyStroke('Enter', (e) => {

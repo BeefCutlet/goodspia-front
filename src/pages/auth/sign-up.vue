@@ -7,7 +7,7 @@
       <button class="registration-toggle">회원가입</button>
     </div>
     <div class="registration-box">
-      <div class="registration-items">
+      <form class="registration-items">
         <input
           type="text"
           id="email"
@@ -22,6 +22,7 @@
           class="registration-input"
           placeholder="비밀번호(영문,숫자,특수문자 포함 8자리 이상)"
           maxlength="20"
+          autocomplete="off"
           v-model="password"
         />
         <input
@@ -30,6 +31,7 @@
           class="registration-input"
           placeholder="비밀번호 확인"
           maxlength="20"
+          autocomplete="off"
           v-model="passwordConfirm"
         />
         <input
@@ -49,8 +51,8 @@
           @input="(event) => (name = event.target.value)"
         />
         <v-radio-group inline v-model="gender">
-          <v-radio label="남자" value="MAN" />
-          <v-radio label="여자" value="WOMAN" />
+          <v-radio label="남자" value="MALE" />
+          <v-radio label="여자" value="FEMALE" />
         </v-radio-group>
         <input
           type="text"
@@ -94,7 +96,7 @@
           :value="birthday"
           @input="changeBirthdayFormat($event)"
         />
-      </div>
+      </form>
     </div>
     <button class="sign-up-btn" @click="executeSignUp()">회원가입</button>
     <span class="error">{{ errorMessage }}</span>

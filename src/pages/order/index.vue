@@ -3,7 +3,7 @@
     <OrderHeader step="ORDER" />
     <div class="d-flex justify-space-between">
       <OrdererInfo :member-info="memberInfo" />
-      <OrderGoodsInfo />
+      <OrderGoodsInfo :member-info="memberInfo" />
     </div>
   </div>
 </template>

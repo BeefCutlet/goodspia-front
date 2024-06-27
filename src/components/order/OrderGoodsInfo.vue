@@ -62,6 +62,11 @@ import { ref } from 'vue'
 import { addOrders, deleteOrder } from '@/api/order'
 import { completePayment } from '@/api/payment'
 import { useToastStore } from '@/stores/toast'
+import { usePaymentStore } from '@/stores/pay'
+
+const props = defineProps({
+  memberInfo: Object,
+})
 
 const toastStore = useToastStore()
 
@@ -86,7 +91,8 @@ onMounted(() => {
 /**
  * PORTONE 결제창
  */
-const pay = async (orderName, totalPrice, paymentMethod) => {
+const paymentStore = usePaymentStore()
+const pay = async () => {
   const orders = []
   orderItems.forEach((orderItem) => {
     const item = {
@@ -112,23 +118,22 @@ const pay = async (orderName, totalPrice, paymentMethod) => {
       orderItems.length > 1
         ? orderItems[0].goodsName + ' 외 ' + orderItems.length - 1 + '개'
         : orderItems[0].goodsName,
-    totalAmount: 1000,
+    totalAmount: totalPrice.value + deliveryCharge.value,
     currency: 'KRW',
-    payMethod: 'CARD',
+    payMethod: paymentStore.payMethod,
     customer: {
-      customerId: 'test@email.com',
-      firstName: 'Member',
-      lastName: 'Name',
-      email: 'test@email.com',
+      customerId: props.memberInfo.email,
+      fullName: props.memberInfo.name,
+      email: props.memberInfo.email,
       phoneNumber: '010-2345-6789',
       address: {
         country: 'KR',
-        addressLine1: '서울시 멋지구 시크할지동',
-        addressLine2: '111호',
+        addressLine1: props.memberInfo.address.address1,
+        addressLine2: props.memberInfo.address.address2,
         city: '도시',
         province: '주',
       },
-      zipcode: '01234',
+      zipcode: props.memberInfo.address.zipcode,
       gender: 'MALE',
       birthYear: '2000',
       birthMonth: '11',

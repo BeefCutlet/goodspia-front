@@ -11,6 +11,7 @@
             :goods-item="goodsItem"
             :goods-designs="goodsDesigns"
             :wish-status="wishStatus"
+            :coupons="coupons.coupons"
             @toggle-wish="toggleWish"
           />
         </v-col>
@@ -53,6 +54,7 @@ import { useRoute } from 'vue-router'
 import { getGoods } from '@/api/goods'
 import { ref, onBeforeMount, watch } from 'vue'
 import { addWish, deleteWish, getWishStatus } from '@/api/wish'
+import { getGoodsCouponList } from '@/api/coupon'
 
 const route = useRoute()
 const goodsId = route.params.id
@@ -63,6 +65,9 @@ const goodsDesignNames = ref([])
 
 const wish = ref(null)
 const wishStatus = ref(false)
+
+//쿠폰 목록
+const coupons = ref([])
 
 //액세스 토큰에 변화가 생길 경우(로그인 상태 변화), 찜하기 상태를 재확인
 watch(wish, async (current) => {
@@ -92,8 +97,16 @@ const getGoodsItem = async () => {
   wish.value = await getWishStatus(goodsId)
 }
 
-onBeforeMount(() => {
-  getGoodsItem()
+/**
+ * 쿠폰 목록 조회
+ */
+const getGoodsCoupons = async (goodsId) => {
+  coupons.value = await getGoodsCouponList(goodsId)
+}
+
+onBeforeMount(async () => {
+  await getGoodsItem()
+  await getGoodsCoupons(goodsId)
 })
 
 const toggleWish = async () => {

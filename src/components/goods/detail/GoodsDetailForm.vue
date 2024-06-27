@@ -66,6 +66,47 @@
         >
       </p>
     </div>
+    <div>
+      <v-dialog max-width="700">
+        <template v-slot:activator="{ props: activatorProps }">
+          <v-btn
+            variant="outlined"
+            color="success"
+            block
+            v-bind="activatorProps"
+          >
+            쿠폰 목록
+          </v-btn>
+        </template>
+
+        <template v-slot:default="{ isActive }">
+          <v-card title="쿠폰 목록">
+            <template v-slot:item>
+              <div
+                v-for="(coupon, index) in coupons"
+                :key="coupon.couponId"
+                class="couponCard d-flex justify-center"
+              >
+                <CouponCard
+                  :coupon="coupon"
+                  :custom-style="{ width: '600px' }"
+                  @click="takeCoupon(coupon.couponId, index)"
+                />
+              </div>
+            </template>
+
+            <v-card-actions class="d-flex justify-end">
+              <v-btn
+                color="primary"
+                text="닫기"
+                variant="flat"
+                @click="isActive.value = false"
+              ></v-btn>
+            </v-card-actions>
+          </v-card>
+        </template>
+      </v-dialog>
+    </div>
     <div class="d-flex flex-column justify-space-around mb-5 ga-3">
       <v-btn variant="outlined" color="primary" block @click="addCarts">
         장바구니
@@ -97,8 +138,10 @@ import { ref, watch } from 'vue'
 import { addCartList } from '@/api/cart'
 import { useRouter } from 'vue-router'
 import { validateAuth } from '@/util/authUtil'
+import { receiveCoupon } from '@/api/coupon'
 
 import SelectedGoodsDesign from './SelectedGoodsDesign.vue'
+import CouponCard from '@/components/coupon/CouponCard.vue'
 
 const props = defineProps({
   goodsItem: {
@@ -110,6 +153,10 @@ const props = defineProps({
   wishStatus: {
     type: Boolean,
     default: false,
+  },
+  coupons: {
+    type: Array,
+    default: [],
   },
 })
 
@@ -281,6 +328,28 @@ const addOrders = () => {
   localStorage.setItem('goodspia_order_items', JSON.stringify(orderItems))
   router.push('/order')
 }
+
+/**
+ * 쿠폰 받기
+ */
+const takeCoupon = async (couponId, index) => {
+  if (props.coupons[index].isExpired === 1) {
+    return
+  }
+
+  let isSuccess = await validateAuth()
+  if (!isSuccess) {
+    if (confirm('로그인이 필요합니다. 로그인 페이지로 이동하시겠습니까?')) {
+      router.push('/auth/sign-in')
+    }
+    return
+  }
+
+  isSuccess = await receiveCoupon(couponId)
+  if (isSuccess) {
+    props.coupons[index].isExpired = 1
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -288,5 +357,9 @@ const addOrders = () => {
   font-weight: 700;
   font-size: large;
   margin-bottom: 10px;
+}
+
+.couponCard {
+  cursor: pointer;
 }
 </style>
