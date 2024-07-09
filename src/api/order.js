@@ -29,3 +29,16 @@ export const deleteOrder = async (orderId) => {
       return false
     })
 }
+
+//요청받은 주문 목록 조회
+export const getRequestedOrderList = async () => {
+  return await api
+    .get('/orders/artist')
+    .then((response) => {
+      return response.data
+    })
+    .catch(() => {
+      toastStore.useToast('주문 목록 조회 실패')
+      return Promise.reject()
+    })
+}

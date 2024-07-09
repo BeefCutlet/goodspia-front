@@ -113,7 +113,7 @@ const pay = async () => {
     storeId: import.meta.env.VITE_STORE_ID,
     // 채널 키 설정
     channelKey: import.meta.env.VITE_TOSSPAYMENT_CHANNEL_ID,
-    paymentId: `payment-${crypto.randomUUID().substring(0, 30)}`,
+    paymentId: 'PAYMENT-' + savedOrder.orderUid.substring('ORDER-'.length()),
     orderName:
       orderItems.length > 1
         ? orderItems[0].goodsName + ' 외 ' + orderItems.length - 1 + '개'
